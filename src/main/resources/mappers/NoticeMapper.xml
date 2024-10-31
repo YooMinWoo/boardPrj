@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.noticePrj.mappers.NoticeMapper">
+
+    <select id="findAll" resultType="com.example.noticePrj.vo.Notice">
+        SELECT * FROM notice
+    </select>
+
+    <insert id="createNotice" parameterType="com.example.noticePrj.valid.ValidNotice">
+        insert into notice(member_id, title, content, view_count) values(#{member_id}, #{title}, #{content}, #{view_count})
+    </insert>
+
+    <select id="findNotice" resultType="com.example.noticePrj.vo.Notice" parameterType="Long">
+        select * from notice where id = #{notice_id}
+    </select>
+
+    <update id="updateNotice" parameterType="com.example.noticePrj.valid.ValidNotice">
+        update notice set title = #{title}, content = #{content}, update_date = now() where id = #{id}
+    </update>
+
+    <update id="increaseViewCount" parameterType="Long">
+        update notice set view_count = view_count + 1 where id = #{id}
+    </update>
+
+    <delete id="deleteNotice" parameterType="Long">
+        delete from notice where id = #{id}
+    </delete>
+
+</mapper>

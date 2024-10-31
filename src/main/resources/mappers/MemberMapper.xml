@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.noticePrj.mappers.MemberMapper">
+
+    <select id="findId" parameterType="String" resultType="com.example.noticePrj.vo.Member">
+        SELECT * FROM member where id = #{id}
+    </select>
+
+    <insert id = "signup" parameterType="com.example.noticePrj.vo.Member">
+        INSERT INTO member(id,name,pw,roles) values(#{id}, #{name}, #{pw}, #{roles})
+    </insert>
+
+</mapper>

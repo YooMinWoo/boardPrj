@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/boot_test?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: codeline
+
+
+  thymeleaf:
+    cache: false
+
+mybatis:
+  mapper-locations: classpath:mappers/*.xml
+
+server:
+  servlet:
+    encoding:
+      force-response=true:
