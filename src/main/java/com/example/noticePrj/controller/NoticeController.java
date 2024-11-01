@@ -2,6 +2,7 @@ package com.example.noticePrj.controller;
 
 import com.example.noticePrj.dto.ApiResponse;
 import com.example.noticePrj.dto.NoticeDTO;
+import com.example.noticePrj.dto.PagingDTO;
 import com.example.noticePrj.service.MemberService;
 import com.example.noticePrj.service.NoticeService;
 import com.example.noticePrj.valid.ValidNotice;
@@ -31,9 +32,11 @@ public class NoticeController {
 
     // 전체 조회
     @GetMapping("/notice")
-    public ResponseEntity<?> board(){
+    public ResponseEntity<?> board(@RequestParam(required = false) Integer page_num) {
+        if(page_num == null || page_num == 0) page_num = 1;
+        PagingDTO pagingDTO = new PagingDTO(page_num);
         try{
-            List<Notice> notice = noticeService.findAll();
+            List<Notice> notice = noticeService.findAll(pagingDTO);
             ApiResponse<?> apiResponse = new ApiResponse<>(HttpStatus.OK.value(), "게시판 전제 조회", notice);
             return ResponseEntity.status(HttpStatus.OK.value()).body(apiResponse);
         } catch(Exception e){
@@ -75,6 +78,21 @@ public class NoticeController {
             return ResponseEntity.status(HttpStatus.OK.value()).body(apiResponse);
         } catch(Exception e){
             ApiResponse<?> apiResponse = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "게시판 등록 실패", validNotice);
+            System.err.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(apiResponse);
+        }
+    }
+
+    //더미데이터 추가
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    @PostMapping("/notice_dummyData")
+    public ResponseEntity<?> dummy(@AuthenticationPrincipal MemberContext memberContext){
+        try {
+            noticeService.dummyData(memberContext.getMemberDTO().getId());
+            ApiResponse<?> apiResponse = new ApiResponse<>(HttpStatus.OK.value(), "더미데이터 등록 성공", null);
+            return ResponseEntity.status(HttpStatus.OK.value()).body(apiResponse);
+        } catch(Exception e){
+            ApiResponse<?> apiResponse = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "더미데이터 등록 실패", null);
             System.err.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(apiResponse);
         }

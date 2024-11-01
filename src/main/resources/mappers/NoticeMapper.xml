@@ -4,8 +4,8 @@
 
 <mapper namespace="com.example.noticePrj.mappers.NoticeMapper">
 
-    <select id="findAll" resultType="com.example.noticePrj.vo.Notice">
-        SELECT * FROM notice
+    <select id="findAll" resultType="com.example.noticePrj.vo.Notice" parameterType="com.example.noticePrj.dto.PagingDTO">
+        SELECT * FROM notice limit #{showCount} offset #{size}
     </select>
 
     <insert id="createNotice" parameterType="com.example.noticePrj.valid.ValidNotice">

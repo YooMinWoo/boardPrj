@@ -1,5 +1,6 @@
 package com.example.noticePrj.mappers;
 
+import com.example.noticePrj.dto.PagingDTO;
 import com.example.noticePrj.valid.ValidNotice;
 import com.example.noticePrj.vo.Notice;
 import org.apache.ibatis.annotations.Mapper;
@@ -8,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface NoticeMapper {
-    List<Notice> findAll();
+    List<Notice> findAll(PagingDTO pagingDTO);
 
     void createNotice(ValidNotice validNotice);
 
