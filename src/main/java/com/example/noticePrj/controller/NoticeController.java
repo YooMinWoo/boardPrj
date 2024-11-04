@@ -1,12 +1,11 @@
 package com.example.noticePrj.controller;
 
 import com.example.noticePrj.dto.ApiResponse;
-import com.example.noticePrj.dto.NoticeDTO;
-import com.example.noticePrj.dto.PagingDTO;
+import com.example.noticePrj.dto.ResponseNoticeDTO;
+import com.example.noticePrj.dto.SearchDTO;
 import com.example.noticePrj.service.MemberService;
 import com.example.noticePrj.service.NoticeService;
 import com.example.noticePrj.valid.ValidNotice;
-import com.example.noticePrj.vo.Member;
 import com.example.noticePrj.vo.MemberContext;
 import com.example.noticePrj.vo.Notice;
 import jakarta.validation.Valid;
@@ -32,12 +31,13 @@ public class NoticeController {
 
     // 전체 조회
     @GetMapping("/notice")
-    public ResponseEntity<?> board(@RequestParam(required = false) Integer page_num) {
-        if(page_num == null || page_num == 0) page_num = 1;
-        PagingDTO pagingDTO = new PagingDTO(page_num);
+    public ResponseEntity<?> board(@RequestParam(defaultValue = "1") int page_num,
+                                   @RequestParam(defaultValue = "") String keyword,
+                                   @RequestParam(defaultValue = "10") int page_size,
+                                   @RequestParam(defaultValue = "latest") String sort) {
         try{
-            List<Notice> notice = noticeService.findAll(pagingDTO);
-            ApiResponse<?> apiResponse = new ApiResponse<>(HttpStatus.OK.value(), "게시판 전제 조회", notice);
+            ResponseNoticeDTO allPage = noticeService.getAllPage(page_num, keyword, page_size, sort);
+            ApiResponse<?> apiResponse = new ApiResponse<>(HttpStatus.OK.value(), "게시판 전제 조회", allPage);
             return ResponseEntity.status(HttpStatus.OK.value()).body(apiResponse);
         } catch(Exception e){
             ApiResponse<?> apiResponse = new ApiResponse<>(HttpStatus.BAD_REQUEST.value(), "게시판 조회 실패", null);
@@ -156,4 +156,5 @@ public class NoticeController {
         ApiResponse<?> apiResponse = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "권한 없음!", null);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(apiResponse);
     }
+
 }

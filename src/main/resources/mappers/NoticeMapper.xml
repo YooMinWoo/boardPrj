@@ -4,8 +4,26 @@
 
 <mapper namespace="com.example.noticePrj.mappers.NoticeMapper">
 
-    <select id="findAll" resultType="com.example.noticePrj.vo.Notice" parameterType="com.example.noticePrj.dto.PagingDTO">
-        SELECT * FROM notice limit #{showCount} offset #{size}
+<!--    <select id="findAll" resultType="com.example.noticePrj.vo.Notice" parameterType="com.example.noticePrj.dto.SearchDTO">-->
+<!--        SELECT * FROM notice where title like CONCAT('%', #{keyword}, '%') limit #{showCount} offset #{size}-->
+<!--    </select>-->
+
+    <select id="findAll" resultType="com.example.noticePrj.vo.Notice" parameterType="com.example.noticePrj.dto.ResponseNoticeDTO">
+        SELECT * FROM notice
+        where title like CONCAT('%', #{keyword}, '%')
+        <choose>
+            <when test="sort == 'earliest'">
+                order by id asc
+            </when>
+            <when test="sort == 'view_count'">
+                order by view_count desc
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        limit #{pageSize} offset ${pageSize * (pageNum-1)}
+
     </select>
 
     <insert id="createNotice" parameterType="com.example.noticePrj.valid.ValidNotice">
@@ -27,5 +45,9 @@
     <delete id="deleteNotice" parameterType="Long">
         delete from notice where id = #{id}
     </delete>
+
+    <select id="getNoticeCount" parameterType="String" resultType="int">
+        select count(*) from notice where title like CONCAT('%', #{keyword}, '%')
+    </select>
 
 </mapper>

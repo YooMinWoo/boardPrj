@@ -1,17 +1,17 @@
 package com.example.noticePrj.dto;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Data
-public class PagingDTO {
+public class SearchDTO {
     private final int showCount = 10;
     private final int size;
+    private final String keyword;
 
-    public PagingDTO(int page_num) {
+    public SearchDTO(int page_num, String keyword) {
         this.size = this.showCount * (page_num - 1);
+        this.keyword = keyword;
     }
 }
