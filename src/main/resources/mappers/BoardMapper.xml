@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.boardPrj.mappers.BoardMapper">
+
+<!--    <select id="findAll" resultType="com.example.boardPrj.vo.Board" parameterType="com.example.boardPrj.dto.SearchDTO">-->
+<!--        SELECT * FROM board where title like CONCAT('%', #{keyword}, '%') limit #{showCount} offset #{size}-->
+<!--    </select>-->
+
+    <select id="findAll" resultType="com.example.boardPrj.vo.Board" parameterType="com.example.boardPrj.dto.ResponseBoardDTO">
+        SELECT * FROM board
+        where title like CONCAT('%', #{keyword}, '%')
+        <choose>
+            <when test="sort == 'earliest'">
+                order by id asc
+            </when>
+            <when test="sort == 'view_count'">
+                order by view_count desc
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        limit #{pageSize} offset ${pageSize * (pageNum-1)}
+
+    </select>
+
+    <insert id="createBoard" parameterType="com.example.boardPrj.valid.ValidBoard">
+        insert into board(member_id, title, content, view_count) values(#{member_id}, #{title}, #{content}, #{view_count})
+    </insert>
+
+    <select id="findBoard" resultType="com.example.boardPrj.vo.Board" parameterType="Long">
+        select * from board where id = #{board_id}
+    </select>
+
+    <update id="updateBoard" parameterType="com.example.boardPrj.valid.ValidBoard">
+        update board set title = #{title}, content = #{content}, update_date = now() where id = #{id}
+    </update>
+
+    <update id="increaseViewCount" parameterType="Long">
+        update board set view_count = view_count + 1 where id = #{id}
+    </update>
+
+    <delete id="deleteBoard" parameterType="Long">
+        delete from board where id = #{id}
+    </delete>
+
+    <select id="getBoardCount" parameterType="String" resultType="int">
+        select count(*) from board where title like CONCAT('%', #{keyword}, '%')
+    </select>
+
+</mapper>

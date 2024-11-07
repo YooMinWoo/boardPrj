@@ -2,13 +2,13 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.noticePrj.mappers.MemberMapper">
+<mapper namespace="com.example.boardPrj.mappers.MemberMapper">
 
-    <select id="findId" parameterType="String" resultType="com.example.noticePrj.vo.Member">
+    <select id="findId" parameterType="String" resultType="com.example.boardPrj.vo.Member">
         SELECT * FROM member where id = #{id}
     </select>
 
-    <insert id = "signup" parameterType="com.example.noticePrj.vo.Member">
+    <insert id = "signup" parameterType="com.example.boardPrj.vo.Member">
         INSERT INTO member(id,name,pw,roles) values(#{id}, #{name}, #{pw}, #{roles})
     </insert>
 
